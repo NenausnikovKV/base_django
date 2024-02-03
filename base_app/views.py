@@ -1,4 +1,4 @@
-
+from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views import View
@@ -14,7 +14,11 @@ def root(request):
 
 
 def hello_world(request):
-    return HttpResponse("hello world")
+    user = authenticate(username="admin", password="admin")
+    if user:
+        return HttpResponse(f"hello {user.username}")
+    else:
+        return HttpResponse("hello world")
 
 
 class HelloWorld(View):
