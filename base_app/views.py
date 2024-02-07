@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views import View
@@ -13,9 +14,11 @@ def root(request):
     return render(request, template_name="base_app/root.html", context={"addresses": addresses})
 
 
+@login_required()
 def hello_world(request):
-    user = authenticate(username="admin", password="admin")
-    if user:
+    # user = authenticate(username="admin", password="admin")
+    if request.user.is_authenticated:
+        user = request.user
         return HttpResponse(f"hello {user.username}")
     else:
         return HttpResponse("hello world")
