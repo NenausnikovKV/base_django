@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views import View
@@ -15,6 +16,7 @@ def root(request):
 
 
 @login_required()
+@permission_required("base_app.add_name", raise_exception=True)
 def hello_world(request):
     # user = authenticate(username="admin", password="admin")
     if request.user.is_authenticated:
@@ -24,7 +26,8 @@ def hello_world(request):
         return HttpResponse("hello world")
 
 
-class HelloWorld(View):
+class HelloWorld(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = []
 
     @staticmethod
     def get(request):
