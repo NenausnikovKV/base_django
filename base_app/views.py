@@ -16,7 +16,8 @@ def root(request):
 
 
 @login_required()
-@permission_required("base_app.add_name", raise_exception=True)
+# @permission_required("base_app.add_name", raise_exception=True)
+@permission_required("base_app.can_eat_pizzas", raise_exception=True)
 def hello_world(request):
     # user = authenticate(username="admin", password="admin")
     if request.user.is_authenticated:
